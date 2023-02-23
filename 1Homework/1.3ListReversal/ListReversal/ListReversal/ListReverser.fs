@@ -1,6 +1,6 @@
 ﻿namespace ListReversal
 
-module Say =
+module Reverser =
     let reverse (ls : List<'a>) =
         let rec trueReverse (oldList : List<'a>, newList : List<'a>) =
             if oldList.IsEmpty then
