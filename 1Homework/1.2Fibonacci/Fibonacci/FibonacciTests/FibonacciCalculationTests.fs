@@ -1,11 +1,7 @@
 module FibonacciTests
 
-open Fibonacci
+open FibonacciCalculation
 open NUnit.Framework
-
-[<SetUp>]
-let Setup () =
-    ()
 
 [<Test>]
 let FibonacciWorks () =

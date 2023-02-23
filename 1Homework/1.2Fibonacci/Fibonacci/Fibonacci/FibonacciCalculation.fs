@@ -1,4 +1,4 @@
-﻿namespace Fibonacci
+﻿namespace FibonacciCalculation
 
 module FibonacciCalculation =  
     let rec Fibonacci i =
