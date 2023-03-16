@@ -1,11 +1,8 @@
 module Factorial.Factorial
 
 let rec Factorial x =
-    if x < 0 then
-        0
-    else if x = 0 || x = 1 then
-        1
-    else
-        x * Factorial (x - 1)
-    
+    match x with
+    | _ when x < 0 -> 0
+    | 0 -> 1
+    | _ -> x * Factorial (x - 1)
         
