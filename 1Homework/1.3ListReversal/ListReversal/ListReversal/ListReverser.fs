@@ -3,11 +3,8 @@
 module Reverser =
     let reverse (ls : List<'a>) =
         let rec trueReverse (oldList : List<'a>, newList : List<'a>) =
-            if oldList.IsEmpty then
-                newList
-            else
-                let newList1 = oldList.Head :: newList
-                
-                trueReverse (oldList.Tail, newList1)
+            match oldList with
+            | [] -> newList
+            | _ -> trueReverse (oldList.Tail, oldList.Head :: newList)
         
         trueReverse (ls, List<'a>.Empty)
