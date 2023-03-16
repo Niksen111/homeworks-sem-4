@@ -5,23 +5,17 @@ module RangeOfDegrees =
         
         let reverse (ls : List<'a>) =
             let rec trueReverse (oldList : List<'a>, newList : List<'a>) =
-                if oldList.IsEmpty then
-                    newList
-                else
-                    let newList1 = oldList.Head :: newList
-                    
-                    trueReverse (oldList.Tail, newList1)
-            
+                match oldList with
+                | [] -> newList
+                | _ -> trueReverse (oldList.Tail, oldList.Head :: newList)
             trueReverse (ls, List<'a>.Empty)
             
         let rec listOfDegrees (finalDegree, currentDegree, value, list : List<float>)=
             if finalDegree < currentDegree then
                 reverse list 
             else
-                let newList = value :: list
-                listOfDegrees (finalDegree, currentDegree + 1, value * 2., newList)
+                listOfDegrees (finalDegree, currentDegree + 1, value * 2., value :: list)
             
-        
         if m < 0 then
             List<double>.Empty
         else
