@@ -12,3 +12,4 @@ let FindWorks () =
     Assert.AreEqual(-1, find(666, intList))
     Assert.AreEqual(2, find("helicopter", stringList))
     Assert.AreEqual(-1, find("ship", stringList))
+    Assert.AreEqual(-1, find(5, List.Empty))
