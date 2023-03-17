@@ -9,4 +9,8 @@
         <Compile Include="EvenNumbers.fs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="FsCheck" Version="3.0.0-beta2" />
+    </ItemGroup>
+
 </Project>
