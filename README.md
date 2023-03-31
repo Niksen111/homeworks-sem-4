@@ -17,3 +17,9 @@
   - Normalization
   - S K K
   - Lambda interpreter
+- 4Homework
+  - Sequence of brackets
+  - Point-free
+  - Phone dictionary
+- 5Homework
+  - Local network
