@@ -29,6 +29,6 @@ module Tasks =
             | [] -> ()
             | h::t ->
                 printRhombusRec t
-                printf "%s" <| (String.concat "" <| List.map string h)
+                printf "%s\n" <| (String.concat "" <| List.map string h)
                 
         printRhombusRec <| rhombus n
