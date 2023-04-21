@@ -11,13 +11,13 @@ module Tasks =
             match i with
             | x when x > n * 2 - 1 -> l
             | x when x <= n ->
-                ([for _ in 1..(n - i) -> ' ']
+                rhombusRec (([for _ in 1..(n - i) -> ' ']
                  @ [for _ in 1..(i*2 - 1) -> '*']
-                 @ [for _ in 1..(n - i) -> ' ']) :: l
+                 @ [for _ in 1..(n - i) -> ' ']) :: l) (i + 1)
             | _ ->
-                ([for _ in 1..(i - n) -> ' ']
+                rhombusRec (([for _ in 1..(i - n) -> ' ']
                  @ [for _ in 1..(n * 4 - 1 - i * 2) -> '*']
-                 @ [for _ in 1..(i - n) -> ' ']) :: l
+                 @ [for _ in 1..(i - n) -> ' ']) :: l) (i + 1)
         if (n <= 0) then
             [[]]
         else
