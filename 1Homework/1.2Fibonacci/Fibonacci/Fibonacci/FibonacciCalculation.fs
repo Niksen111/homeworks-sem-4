@@ -3,9 +3,10 @@
 module FibonacciCalculation =  
     let rec Fibonacci i =
         let rec CalculateFibonacci (i, currentI, first, second) =
-            match currentI with
-            | _ when currentI = i -> second
-            | _ -> CalculateFibonacci (i, currentI + 1, second, first + second)
+            if currentI = i then
+                second
+            else
+                CalculateFibonacci (i, currentI + 1, second, first + second)
         match i with
         | _ when i < 0 -> -1
         | 0 -> 0
