@@ -5,6 +5,6 @@ module Reverser =
         let rec trueReverse (oldList : List<'a>, newList : List<'a>) =
             match oldList with
             | [] -> newList
-            | _ -> trueReverse (oldList.Tail, oldList.Head :: newList)
+            | head::tail -> trueReverse (tail, head :: newList)
         
         trueReverse (ls, List<'a>.Empty)
