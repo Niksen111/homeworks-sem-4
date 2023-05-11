@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "RangeOfDegrees", "RangeOfDegrees\RangeOfDegrees.fsproj", "{CEFE3225-9FB3-49FC-8977-2149C1A48F61}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "RangeOfDegreesTests", "RangeOfDegreesTests\RangeOfDegreesTests.fsproj", "{F44817FC-3267-4E2D-94B4-DEA37D283EAE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEFE3225-9FB3-49FC-8977-2149C1A48F61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEFE3225-9FB3-49FC-8977-2149C1A48F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEFE3225-9FB3-49FC-8977-2149C1A48F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEFE3225-9FB3-49FC-8977-2149C1A48F61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F44817FC-3267-4E2D-94B4-DEA37D283EAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F44817FC-3267-4E2D-94B4-DEA37D283EAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F44817FC-3267-4E2D-94B4-DEA37D283EAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F44817FC-3267-4E2D-94B4-DEA37D283EAE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
