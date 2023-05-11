@@ -15,4 +15,5 @@ let Test1 () =
     checkBrackets "" |> should be True
     checkBrackets "[((){})[]]" |> should be True
     checkBrackets "(({}[()]))[()]{[()]}({})" |> should be True
+    checkBrackets "[abbdf(sdf(dsg)hd{jfh}jkgkhj)l[hkl]j;]" |> should be True
     
