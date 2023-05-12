@@ -24,7 +24,7 @@ module Control2 =
                     if (elems.Count <> 0) then
                         result <- Some(elems.Dequeue())
                     else
-                        ())
+                        isEmpty.Reset() |> ignore)
                 if result.IsNone then
                     let _ = isEmpty.WaitOne()
                     lock lockObjEn (fun () ->
