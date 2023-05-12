@@ -1,4 +1,5 @@
 # Solutions of problems on SACDP in the F# language.
+Structures and algorithms for computer data processing (SACDP).
 
 ### Task navigation
 #### Homeworks
