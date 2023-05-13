@@ -8,7 +8,7 @@ module PhoneDictionary =
     
     let rec isPhoneNumber (phone: string) =
         let regex =
-            System.Text.RegularExpressions.Regex("^\\+?[0-9]{1,3}\\s?[0-9]{2,3}\\s?[0-9]{2,3}\\s?[0-9]{2,3}$")
+            System.Text.RegularExpressions.Regex("^\\+[0-9]{6,12}$")
         regex.IsMatch(phone)
         
     let printDictionaryToFile (fileName:string) (dict:Dictionary<string, string>) =
