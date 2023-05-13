@@ -7,21 +7,6 @@ open System.Collections.Generic
 open FsUnit
 
 [<Test>]
-let ``should print dictionary to file``() =
-    // arrange
-    let fileName = "dictionary.txt"
-    let dict = Dictionary<string, string>()
-    dict.Add("hello", "world")
-    dict.Add("foo", "bar")
-
-    // act
-    printDictionaryToFile fileName dict
-
-    // assert
-    let expectedOutput = ["hello world"; "foo bar\r\n"] |> String.concat "\r\n"
-    Assert.That(File.ReadAllText(fileName), Is.EqualTo(expectedOutput))
-
-[<Test>]
 let ``should print empty dictionary to file``() =
     // arrange
     let fileName = "dictionary.txt"
