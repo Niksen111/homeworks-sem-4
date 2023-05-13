@@ -17,16 +17,6 @@ let funcsAreTheSame x l = initialFunc x l = func5 x l
 let Test1 () =
     Check.QuickThrowOnFailure funcsAreTheSame
 
-let rec compareLists list1 list2 =
-    match list1, list2 with
-    | [], [] -> true
-    | [], _ -> false
-    | _, [] -> false
-    | x::xs, y::ys ->
-        if x = y then
-            compareLists xs ys
-        else false
-
 [<Test>]
 let Test2 () = 
     let inputList = [1; 2; 3; 4]
