@@ -1,5 +1,7 @@
 ﻿namespace LocalNetwork
 
+open System.Collections.Generic
+
 module LocalNetwork =
     
     type OS =
@@ -21,7 +23,7 @@ module LocalNetwork =
                         isAdjacency <- false
             isAdjacency
     
-    let rec containsWith condition ls =
+    let rec containsWith<'a> condition (ls: 'a list) =
         match ls with
         | [] -> false
         | hd::tl -> (condition hd) || (containsWith condition tl)
@@ -30,15 +32,26 @@ module LocalNetwork =
         let mutable winProb = -1.f
         let mutable gnuProb = -1.f
         let mutable macProb = -1.f
-        let mutable probabilities = []
         let mutable adjacencyMatrix = Array2D.init 0 0 (fun _ _ -> 0)
         let mutable infectedComputers = List.Empty
+        let mutable systems = List.Empty
         let random = System.Random()
+        let adjacencyMatrixToList (matrix: int array2d) = 
+            let vertexCount = matrix.GetLength(0)
+            let adjacencyList = List<List<int>>()
+            for i in 1..matrix.Length do
+                adjacencyList.Add(List<int>())
+            for i in 0..vertexCount-1 do
+                for j in (i + 1)..vertexCount-1 do
+                    if matrix[i,j] = 1 then
+                        adjacencyList[i].Add(j)
+                        adjacencyList[j].Add(i)
+            adjacencyList
         let isValidInfected (ls: int list) =
             if ls.IsEmpty || not infectedComputers.IsEmpty || adjacencyMatrix.Length = 0 then
                 false
             else
-                if containsWith (fun x -> x > ls.Length - 1) ls then
+                if containsWith<int> (fun x -> x > ls.Length - 1) ls then
                     false
                 else
                     true
@@ -67,6 +80,11 @@ module LocalNetwork =
             and set (matrix: int array2d) =
                 if adjacencyMatrix.Length = 0 && isAdjacencyMatrix matrix then
                     adjacencyMatrix <- matrix
+        member this.Systems
+            with get () = systems
+            and set (os's: OS list) =
+                if systems.IsEmpty && adjacencyMatrix.Length <> 0 && adjacencyMatrix.Length = os's.Length then
+                    systems <- os's
         member this.IsSetUp =
             winProb <> -1.f && gnuProb <> -1.f && macProb <> -1.f && adjacencyMatrix.Length <> 0 && not infectedComputers.IsEmpty
         member this.isPossibleMakeStep =
@@ -74,6 +92,9 @@ module LocalNetwork =
         member this.PrintCurrentState =
             printfn "Kek"
         member this.MakeStep() =
+            let newInfected = List.Empty
+            for infected in this.Infected do
+                
             ()
         member this.Start() =
             while this.isPossibleMakeStep do
