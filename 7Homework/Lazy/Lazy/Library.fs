@@ -8,6 +8,7 @@ module Lazy =
         
     type LazyOneThread<'a>(func: unit -> 'a) =
         let mutable value = None
+        member this.Get() = (this :> ILazy<_>).Get()
         interface ILazy<'a> with
             member this.Get() =
                 match value with
@@ -15,9 +16,11 @@ module Lazy =
                     value <- Some(func())
                     value |> Option.get
                 | Some v -> v
-    type LazyMultiThread<'a>(func: unit -> 'a) =
+    type BlockingLazy<'a>(func: unit -> 'a) =
         let mutable value = None
         let lockObj = obj()
+        member this.Get() = (this :> ILazy<_>).Get()
+
         interface ILazy<'a> with
             member this.Get() =
                 lock lockObj (fun () ->
@@ -29,6 +32,7 @@ module Lazy =
                
     type LazyLockFree<'a>(func: unit -> 'a) =
         let mutable value = None
+        member this.Get() = (this :> ILazy<_>).Get()
         interface ILazy<'a> with
             member this.Get() =
                 match value with
