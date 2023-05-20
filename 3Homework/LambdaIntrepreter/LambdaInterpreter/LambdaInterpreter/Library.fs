@@ -43,3 +43,20 @@ module LambdaInterpreter =
             | Applique(t1, t2) -> Applique(substituteRec t1 term3, substituteRec t2 term3)
             | Abstraction(v1, t1) -> Abstraction(v1, substituteRec t1 term3)
         substituteRec term term1
+    let normalStrategy t =
+        let mutable changed = true
+        let mutable result = t
+        let rec normStratRec term =
+            match term with
+            | Variable v -> Variable v
+            | Applique(t1, t2) ->
+                match t1 with
+                | Abstraction(v, t3) ->
+                    changed <- true
+                    substitute t3 v t2
+                | _ -> Applique(normStratRec t1, normStratRec t2)
+        while changed do
+            changed <- false
+            result <- normStratRec result
+        
+            
