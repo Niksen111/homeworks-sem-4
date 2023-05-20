@@ -1,14 +1,19 @@
 ﻿namespace PrimeNumbers
 
+open System
+
 module Numbers =
-    let isPrime x =
-        let rec isPrimeRec x i =
-            if x % i = 0 then
-                false
-            else if i * i > x then
+    let isPrime (x: int) =
+        let rec isPrimeRec num i =
+            if i * i > num then
                 true
+            else if num % i = 0 then
+                false
             else
-                isPrimeRec x (i + 1)
-        isPrimeRec x 2
+                isPrimeRec num (i + 1)
+        if x < 2 then
+            false
+        else
+            isPrimeRec x 2
         
     let primeSequence = Seq.initInfinite id |> Seq.filter isPrime
