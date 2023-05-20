@@ -36,9 +36,5 @@ module Lazy =
                 | None ->
                     let current = value
                     let newValue = Some(func())
-                    if not <| obj.ReferenceEquals (current, Interlocked.CompareExchange(&value, newValue, current)) then
-                        value |> Option.get
-                    else
-                        value <- newValue
-                        newValue |> Option.get
-                
+                    Interlocked.CompareExchange(&value, newValue, current) |> ignore
+                    value |> Option.get
