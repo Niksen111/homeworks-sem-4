@@ -26,16 +26,16 @@ let ``Number smaller than 2 should not be considered prime``() =
 
 [<Test>]
 let ``Prime is considered prime``() =
-    isPrime(2) |> should equal true
-    isPrime(7) |> should equal true
-    isPrime(11) |> should equal true
-    isPrime(23) |> should equal true
-    isPrime(27644437) |> should equal true
+    isPrime 2 |> should equal true
+    isPrime 7 |> should equal true
+    isPrime 11 |> should equal true
+    isPrime 23 |> should equal true
+    isPrime 27644437 |> should equal true
 
 [<Test>]
 let ``Not prime numbers are not prime``() =
-    isPrime(4) |> should equal false
-    isPrime(6) |> should equal false
-    isPrime(9) |> should equal false
-    isPrime(99) |> should equal false
-    isPrime(1866326401) |> should equal false
+    isPrime 4 |> should equal false
+    isPrime 6 |> should equal false
+    isPrime 9 |> should equal false
+    isPrime 99 |> should equal false
+    isPrime 1866326401 |> should equal false
