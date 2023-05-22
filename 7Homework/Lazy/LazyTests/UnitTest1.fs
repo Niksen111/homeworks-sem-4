@@ -22,7 +22,7 @@ let ``Blocking lazy works``() =
     let tasks = [for _ in 0..1000 -> async{return blockingLazy.Get()}]
     let uniqueResults = tasks |> Async.Parallel |> Async.RunSynchronously |> Seq.distinct
     uniqueResults |> Seq.length |> should equal 1
-    uniqueResults |> Seq.take 1 |> should equal 1
+    uniqueResults |> Seq.head |> should equal 1
     number |> should equal 1
     
 [<Test>]
@@ -32,4 +32,4 @@ let ``LockFree lazy works``() =
     let tasks = [for _ in 0..1000 -> async{return lockFreeLazy.Get()}]
     let uniqueResults = tasks |> Async.Parallel |> Async.RunSynchronously |> Seq.distinct
     uniqueResults |> Seq.length |> should equal 1
-    uniqueResults |> Seq.take 1 |> should equal 1
+    uniqueResults |> Seq.head |> should equal 1
