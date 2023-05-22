@@ -11,11 +11,9 @@ module Lazy =
         member this.Get() = (this :> ILazy<_>).Get()
         interface ILazy<'a> with
             member this.Get() =
-                match value with
-                | None ->
+                if value.IsNone then
                     value <- Some(func())
-                    value |> Option.get
-                | Some v -> v
+                value.Value
                 
     type BlockingLazy<'a>(func: unit -> 'a) =
         let mutable value = None

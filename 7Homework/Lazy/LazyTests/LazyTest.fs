@@ -10,7 +10,7 @@ let isSameObject = LanguagePrimitives.PhysicalEquality
 [<Test>]
 let ``LazyOneThread.Get returns same value if called multiple times``() = 
     let lazyVal = LazyOneThread(fun () ->
-        [1])
+        obj())
     let actual1 = lazyVal.Get()
     let actual2 = lazyVal.Get()
     isSameObject actual1 actual2 |> should be True
