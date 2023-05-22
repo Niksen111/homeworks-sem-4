@@ -16,29 +16,25 @@ module Lazy =
                     value <- Some(func())
                     value |> Option.get
                 | Some v -> v
+                
     type BlockingLazy<'a>(func: unit -> 'a) =
         let mutable value = None
         let lockObj = obj()
         member this.Get() = (this :> ILazy<_>).Get()
-
         interface ILazy<'a> with
             member this.Get() =
-                lock lockObj (fun () ->
-                     match value with
-                     | None ->
-                         value <- Some(func())
-                         value |> Option.get
-                     | Some v -> v)
-               
+                if value.IsNone then
+                    lock lockObj (fun () ->
+                         if value.IsNone then
+                             value <- Some(func()))
+                value.Value
+
     type LazyLockFree<'a>(func: unit -> 'a) =
         let mutable value = None
         member this.Get() = (this :> ILazy<_>).Get()
         interface ILazy<'a> with
             member this.Get() =
-                match value with
-                | Some x -> x
-                | None ->
-                    let current = value
+                if value.IsNone then
                     let newValue = Some(func())
-                    Interlocked.CompareExchange(&value, newValue, current) |> ignore
-                    value |> Option.get
+                    Interlocked.CompareExchange(&value, newValue, None) |> ignore
+                value.Value

@@ -1,6 +1,5 @@
 module LazyTests
 
-open System
 open System.Threading
 open NUnit.Framework
 open Lazy.Lazy
@@ -17,15 +16,20 @@ let ``LazyOneThread.Get returns same value if called multiple times``() =
     isSameObject actual1 actual2 |> should be True
 
 [<Test>]
-let rec ``Blocking and lock free lazy works``() =
-    let mutable number1 = 0
-    let mutable number2 = 0
-    let blockingLazy = BlockingLazy(fun () -> Interlocked.Increment(&number1))
-    let lockFreeLazy = LazyLockFree(fun () -> Interlocked.Increment(&number2))
-    let tasks1 = [for _ in 0..1000 -> async{return blockingLazy.Get()}]
-    let tasks2 = [for _ in 0..1000 -> async{return lockFreeLazy.Get()}]
-    tasks1 |> Async.Parallel |> Async.RunSynchronously |> ignore
-    tasks2 |> Async.Parallel |> Async.RunSynchronously |> Seq.distinct |> Seq.length |> should equal 1
-
-    number1 |> should equal 1
+let ``Blocking lazy works``() =
+    let mutable number = 0
+    let blockingLazy = BlockingLazy(fun () -> Interlocked.Increment(&number))
+    let tasks = [for _ in 0..1000 -> async{return blockingLazy.Get()}]
+    let uniqueResults = tasks |> Async.Parallel |> Async.RunSynchronously |> Seq.distinct
+    uniqueResults |> Seq.length |> should equal 1
+    uniqueResults |> Seq.take 1 |> should equal 1
+    number |> should equal 1
     
+[<Test>]
+let ``LockFree lazy works``() =
+    let mutable number = 0
+    let lockFreeLazy = LazyLockFree(fun () -> Interlocked.Increment(&number))
+    let tasks = [for _ in 0..1000 -> async{return lockFreeLazy.Get()}]
+    let uniqueResults = tasks |> Async.Parallel |> Async.RunSynchronously |> Seq.distinct
+    uniqueResults |> Seq.length |> should equal 1
+    uniqueResults |> Seq.take 1 |> should equal 1
