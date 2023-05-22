@@ -24,3 +24,9 @@ Structures and algorithms for computer data processing (SACDP).
   - Phone dictionary
 - 5Homework
   - Local network
+- 6Homework
+  - Rounding workflow
+  - Calculation on strings
+- 7Homework
+  - Lazy
+  - MiniCrawler
