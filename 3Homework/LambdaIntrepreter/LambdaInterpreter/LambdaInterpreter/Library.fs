@@ -21,7 +21,7 @@ module LambdaInterpreter =
             | Applique(t1, t2) -> bvRec t1 @ bvRec t2
             | Abstraction(v, t1) -> v :: bvRec t1
         bvRec t |> List.distinct
-    let getNewFreeVarList (ls: char list) =
+    let getOtherVariablesList (ls: char list) =
         let allChars = ['a'..'z'] @ ['A'..'Z']
         allChars |> List.filter (fun c -> not (List.contains c ls))
     let isValidTerm term =
@@ -43,8 +43,17 @@ module LambdaInterpreter =
             | Applique(t1, t2) -> Applique(substituteRec t1 term3, substituteRec t2 term3)
             | Abstraction(v1, t1) -> Abstraction(v1, substituteRec t1 term3)
         substituteRec term term1
-    let fixVariables term1 term2 =
-        ()
+    let fixVariables term1 v term2 =
+        let bv1 = bv term1
+        let bv2 = bv term2
+        let intersection = bv1 |> List.filter (fun x -> bv2 |> List.contains x)
+        let newBv = getOtherVariablesList (bv1 @ bv2) |> List.take (intersection |> List.length)
+        let rec substituteRec term (leftIntersec: char list) (leftBv: char list)=
+            if intersection.IsEmpty then
+                term
+            else
+                substituteRec (substitute term leftIntersec.Head (Variable(leftBv.Head))) leftIntersec.Tail leftBv.Tail
+        substituteRec term1 intersection newBv
     let normalStrategy (t: Term) =
         let rec loop t =
             match t with
@@ -54,9 +63,9 @@ module LambdaInterpreter =
                 (Abstraction(c, newTerm), isSuccessful)
             | Applique(term1, term2) ->
                 match term1 with
-                | Abstraction(c, term) ->
-                    fixVariables term term2
-                    (substitute term c term2, true)
+                | Abstraction(v, term) ->
+                    let term = fixVariables term v term2
+                    (substitute term v term2, true)
                 | _ ->
                     let newTerm1, isSuccessful = loop term1
                     if isSuccessful then
