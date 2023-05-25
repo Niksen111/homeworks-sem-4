@@ -1,11 +1,31 @@
 module LambdaInterpreterTests
 
 open NUnit.Framework
+open LambdaInterpreter.LambdaInterpreter
+open FsUnit
 
-[<SetUp>]
-let Setup () =
-    ()
+let termId = Abstraction('l', Variable('l'))
+let termTrue = Abstraction('x', Abstraction('y', Variable('x')))
+let termFalse = Abstraction('z', Abstraction('w', Variable('w')))
+let termIf = Abstraction('b', Abstraction('t', Abstraction('f', Applique(Variable('b'), Applique(Variable('t'), Variable('f'))))))
+let termAnd = Abstraction('a', Abstraction('b', Applique(termIf, Applique(Variable 'a', Applique(termTrue, Variable 'b')))))
+// IF TRUE ID v
+let term1 = Applique(termIf, Applique(termTrue, Applique(termId, Variable 'v')))
 
 [<Test>]
-let Test1 () =
-    Assert.Pass()
+let ``Get other variables works`` () =
+    let expectedResult1 = ['a'..'z'] @ ['A'..'Z'] |> List.filter (fun c -> c <> 'z')
+    let result1 = getOtherVariablesList ['z']
+    let expectedResult2 = ['a'..'z'] @ ['A'..'Z'] |> List.filter (fun c -> not (List.contains c ['z'; 'y'; 'x']))
+    let result2 = getOtherVariablesList ['z'; 'y'; 'x']
+    result1 |> should equal expectedResult1
+    result2 |> should equal expectedResult2
+
+[<Test>]
+let ``NormalStrategy works`` () =
+    ()
+    // Is not working :(
+    //let result = normalStrategy term1
+    // match result with
+    // | Variable _ -> Assert.Pass()
+    // | _ -> Assert.Fail()

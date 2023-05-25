@@ -49,7 +49,7 @@ module LambdaInterpreter =
         let intersection = bv1 |> List.filter (fun x -> bv2 |> List.contains x)
         let newBv = getOtherVariablesList (bv1 @ bv2) |> List.take (intersection |> List.length)
         let rec substituteRec term (leftIntersec: char list) (leftBv: char list)=
-            if intersection.IsEmpty then
+            if leftIntersec.IsEmpty then
                 term
             else
                 substituteRec (substitute term leftIntersec.Head (Variable(leftBv.Head))) leftIntersec.Tail leftBv.Tail
@@ -64,8 +64,13 @@ module LambdaInterpreter =
             | Applique(term1, term2) ->
                 match term1 with
                 | Abstraction(v, term) ->
-                    let term = fixVariables term v term2
-                    (substitute term v term2, true)
+                    match term2 with
+                    | Applique(termA, termB) ->
+                        let term = fixVariables term v termA
+                        (Applique(substitute term v term2, termB), true)
+                    | _ ->
+                        let term = fixVariables term v term2
+                        (substitute term v term2, true)
                 | _ ->
                     let newTerm1, isSuccessful = loop term1
                     if isSuccessful then
