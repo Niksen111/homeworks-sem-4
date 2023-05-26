@@ -1,25 +1,26 @@
 ﻿namespace LambdaInterpreter
 
 module LambdaInterpreter =
-    type Var = char
+    type Variable = char
     type Term =
-        | Variable of Var
-        | Applique of Term * Term
-        | Abstraction of Var * Term
-        
-    let fv t =
+        | Var of Variable
+        | App of Term * Term
+        | Abs of Variable * Term
+    let freeVar t =
         let rec fvRec t list =
             match t with
-            | Variable v -> if List.contains v list then [] else [ v ] 
-            | Applique(t1, t2) -> fvRec t1 list @ fvRec t2 list
-            | Abstraction(v, t1) -> fvRec t1 (v :: list)
+            | Var v -> if List.contains v list then [] else [ v ] 
+            | App(t1, t2) -> fvRec t1 list @ fvRec t2 list
+            | Abs(v, t1) -> fvRec t1 (v :: list)
         fvRec t [] |> List.distinct
-    let bv t =
+    let isFreeVar var term =
+        freeVar term |> List.contains var
+    let boundVar t =
         let rec bvRec t =
             match t with
-            | Variable _ -> []
-            | Applique(t1, t2) -> bvRec t1 @ bvRec t2
-            | Abstraction(v, t1) -> v :: bvRec t1
+            | Var _ -> []
+            | App(t1, t2) -> bvRec t1 @ bvRec t2
+            | Abs(v, t1) -> v :: bvRec t1
         bvRec t |> List.distinct
     let getOtherVariablesList (ls: char list) =
         let allChars = ['a'..'z'] @ ['A'..'Z']
@@ -27,74 +28,28 @@ module LambdaInterpreter =
     let isValidTerm term =
         let rec isValidRec term ls =
             match term with
-            | Variable _ -> true
-            | Applique(t1, t2) -> (isValidRec t1 ls) && (isValidRec t2 ls)
-            | Abstraction(v, t) ->
+            | Var _ -> true
+            | App(t1, t2) -> (isValidRec t1 ls) && (isValidRec t2 ls)
+            | Abs(v, t) ->
                 if List.contains v ls then
                     false
                 else
                     isValidRec t (v::ls)
         isValidRec term []
-    let substituteFv term v term1 =   
-        let rec substituteRec term2 =
-            match term2 with
-            | Variable v1 when v1 = v -> term1
-            | Variable v1 -> Variable(v1)
-            | Applique(t1, t2) -> Applique(substituteRec t1, substituteRec t2)
-            | Abstraction(v1, t1) -> Abstraction(v1, substituteRec t1)
-        substituteRec term 
-    let substituteBv term v newV =
-        let rec substituteBvRec term2 =
-            match term2 with
-            | Variable v1 when v1 = v -> Variable newV
-            | Variable v1 -> Variable(v1)
-            | Applique(t1, t2) -> Applique(substituteBvRec t1, substituteBvRec t2)
-            | Abstraction(v1, t1) when v1 = v -> Abstraction(newV, substituteBvRec t1)
-            | Abstraction(v1, t1) -> Abstraction(v1, substituteBvRec t1)
-        substituteBvRec term
-    let fixVariables term1 term2 =
-        let bv1 = bv term1
-        let bv2 = bv term2
-        let intersection = bv1 |> List.filter (fun x -> bv2 |> List.contains x)
-        let newBv = getOtherVariablesList (bv1 @ bv2) |> List.take (intersection |> List.length)
-        let rec substituteRec term (leftIntersec: char list) (leftBv: char list)=
-            if leftIntersec.IsEmpty then
-                term
-            else
-                substituteRec (substituteBv term leftIntersec.Head leftBv.Head) leftIntersec.Tail leftBv.Tail
-        substituteRec term1 intersection newBv
-    let normalStrategy (t: Term) =
-        let rec loop t =
-            match t with
-            | Variable v -> (Variable(v), false)
-            | Abstraction(c, term) ->
-                let newTerm, isSuccessful = loop term
-                (Abstraction(c, newTerm), isSuccessful)
-            | Applique(term1, term2) ->
-                match term1 with
-                | Abstraction(v, term) ->
-                    match term2 with
-                    | Applique(termA, termB) ->
-                        let term = fixVariables term termA
-                        (Applique(substituteFv term v termA, termB), true)
-                    | _ ->
-                        let term = fixVariables term term2
-                        (substituteFv term v term2, true)
-                | _ ->
-                    let newTerm1, isSuccessful = loop term1
-                    if isSuccessful then
-                        (Applique(newTerm1, term2), true)
-                    else
-                        let newTerm2, isSuccessful = loop term2
-                        (Applique(newTerm1, newTerm2), isSuccessful)
-
-        let rec normalStrategyRec (term: Term, isSuccessful: bool) =
-            if isSuccessful then
-                normalStrategyRec (loop term)
-            else
-                term
-
-        if not (isValidTerm t) then
-            t
-        else
-            normalStrategyRec(t, true)
+    let rec substitute var body term =
+        match body with
+        | Var v1 when v1 = var -> term
+        | Var _ -> body
+        | App(t1, t2) -> App(substitute var t1 term, substitute var t2 term)
+        | Abs(v1, _) when v1 = var -> body
+        | Abs(v1, t1) when not <| isFreeVar v1 term && isFreeVar v1 t1 ->
+            Abs(v1, substitute var t1 term)
+        | Abs(v1, t1) ->
+            let newVar = freeVar t1 @ freeVar term |> getOtherVariablesList |> List.head
+            Abs(newVar, substitute var (substitute v1 t1 (Var newVar)) term)
+    let rec betaReduce (term: Term) =
+        match term with
+        | Var _ -> term
+        | Abs(var, term1) -> Abs(var, betaReduce term1)
+        | App(Abs(var, term1), term2) -> substitute var term1 term2
+        | App(term1, term2) -> App(betaReduce term1, betaReduce term2)
