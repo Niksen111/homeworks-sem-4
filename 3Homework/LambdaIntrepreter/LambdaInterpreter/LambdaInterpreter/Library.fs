@@ -67,7 +67,7 @@ module LambdaInterpreter =
                     match term2 with
                     | Applique(termA, termB) ->
                         let term = fixVariables term v termA
-                        (Applique(substitute term v term2, termB), true)
+                        (Applique(substitute term v termA, termB), true)
                     | _ ->
                         let term = fixVariables term v term2
                         (substitute term v term2, true)
