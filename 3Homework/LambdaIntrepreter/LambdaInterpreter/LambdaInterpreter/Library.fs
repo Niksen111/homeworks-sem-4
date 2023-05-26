@@ -53,3 +53,10 @@ module LambdaInterpreter =
         | Abs(var, term1) -> Abs(var, betaReduce term1)
         | App(Abs(var, term1), term2) -> substitute var term1 term2
         | App(term1, term2) -> App(betaReduce term1, betaReduce term2)
+    let normalization term =
+        let mutable oldTerm = Var 'v'
+        let mutable newTerm = term
+        while oldTerm <> newTerm do
+            oldTerm <- newTerm
+            newTerm <- betaReduce newTerm
+        newTerm

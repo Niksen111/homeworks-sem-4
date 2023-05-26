@@ -12,18 +12,17 @@ let termOr = Abs('a', Abs('b', App(termIf, App(Var 'a', App(termTrue, Var 'b')))
 // IF TRUE u v
 // Result u
 let term1 = App(App(App(termIf, termTrue), Var 'u'), Var 'v')
+// (\x.\.y.y) u v
 // FALSE u v
 // Result v
 let term2 = App(App(termFalse, Var 'u'), Var 'v')
+//let term21 = App(termFalse, App(Var 'u', Var 'v'))
 // ID y
 let term3 = App(termId, Var 'y')
 // x y
 let term4 = App(Var 'x', Var 'y')
 // (\x.y) ((\x.x x) (\x.x x))
 let term5 = App(Abs('x', Var 'y'), App(Abs('x', App(Var 'x', Var 'x')), Abs('x', App(Var 'x', Var 'x'))))
-
-// (\x.\.y.y) a b
-
 
 [<Test>]
 let ``Get other variables works`` () =
@@ -34,16 +33,9 @@ let ``Get other variables works`` () =
     result1 |> should equal expectedResult1
     result2 |> should equal expectedResult2
     
-//[<Test>]
-let ``BetaReduction works1`` () =
-    let result = betaReduce term1
-    match result with
-    | Var 'u' -> ()
-    | _ -> Assert.Fail()
-    
-//[<Test>]
-let ``BetaReduction works 2`` () =
-    let result = betaReduce term2
+[<Test>]
+let ``Normalization works2`` () =
+    let result = normalization term2
     match result with
     | Var 'v' -> ()
     | _ -> Assert.Fail()
