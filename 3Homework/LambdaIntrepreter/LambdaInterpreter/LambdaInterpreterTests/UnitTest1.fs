@@ -45,7 +45,6 @@ let ``bv works`` () =
     bv termIf |> should equal ['b'; 't'; 'f']
     bv term1 |> should equal ['b'; 't'; 'f'; 'x'; 'y']
     
-    
 [<Test>]
 let ``fv works`` () =
     fv termIf |> List.isEmpty |> should be True
@@ -55,3 +54,28 @@ let ``fv works`` () =
 let ``isValidTerm works`` () =
     isValidTerm term1 |> should be True
     isValidTerm (Abstraction('x', Abstraction('x', Variable 'y'))) |> should be False
+    
+[<Test>]
+let ``substituteFv works`` () =
+    let term = Applique(Variable 'x', Applique(Variable 'y', Variable 'x'))
+    let result = substituteFv term 'x' (Variable 'z')
+    match result with
+    | Applique(Variable(x1), Applique(Variable(x2), Variable(x3)))
+        when x1 = 'z' && x2 = 'y' && x3 = 'z' -> ()
+    | _ -> Assert.Fail("Incorrect result.")
+    
+[<Test>]
+let ``substituteBv works`` () =
+    let term = Abstraction('x', Applique(Variable 'x', Variable 'y'))
+    let result = substituteBv term 'x' 'z'
+    match result with
+    | Abstraction(x1, Applique(Variable(x2), Variable(x3)))
+        when x1 = 'z' && x2 = 'z' && x3 = 'y' -> ()
+    | _ -> Assert.Fail("Incorrect result.")
+
+[<Test>]
+let ``fixVariables works`` () =
+    let result = fixVariables termTrue termTrue
+    match result with
+    | Abstraction(v1, Abstraction(v2, Variable v3)) when v1 = 'a' && v2 = 'b' && v3 = 'a' -> ()
+    | _ -> Assert.Fail("Incorrect result.")

@@ -35,15 +35,24 @@ module LambdaInterpreter =
                 else
                     isValidRec t (v::ls)
         isValidRec term []
-    let substitute term v term1 =   
-        let rec substituteRec term2 term3 =
+    let substituteFv term v term1 =   
+        let rec substituteRec term2 =
             match term2 with
-            | Variable v1 when v1 = v -> term3
+            | Variable v1 when v1 = v -> term1
             | Variable v1 -> Variable(v1)
-            | Applique(t1, t2) -> Applique(substituteRec t1 term3, substituteRec t2 term3)
-            | Abstraction(v1, t1) -> Abstraction(v1, substituteRec t1 term3)
-        substituteRec term term1
-    let fixVariables term1 v term2 =
+            | Applique(t1, t2) -> Applique(substituteRec t1, substituteRec t2)
+            | Abstraction(v1, t1) -> Abstraction(v1, substituteRec t1)
+        substituteRec term 
+    let substituteBv term v newV =
+        let rec substituteBvRec term2 =
+            match term2 with
+            | Variable v1 when v1 = v -> Variable newV
+            | Variable v1 -> Variable(v1)
+            | Applique(t1, t2) -> Applique(substituteBvRec t1, substituteBvRec t2)
+            | Abstraction(v1, t1) when v1 = v -> Abstraction(newV, substituteBvRec t1)
+            | Abstraction(v1, t1) -> Abstraction(v1, substituteBvRec t1)
+        substituteBvRec term
+    let fixVariables term1 term2 =
         let bv1 = bv term1
         let bv2 = bv term2
         let intersection = bv1 |> List.filter (fun x -> bv2 |> List.contains x)
@@ -52,7 +61,7 @@ module LambdaInterpreter =
             if leftIntersec.IsEmpty then
                 term
             else
-                substituteRec (substitute term leftIntersec.Head (Variable(leftBv.Head))) leftIntersec.Tail leftBv.Tail
+                substituteRec (substituteBv term leftIntersec.Head leftBv.Head) leftIntersec.Tail leftBv.Tail
         substituteRec term1 intersection newBv
     let normalStrategy (t: Term) =
         let rec loop t =
@@ -66,11 +75,11 @@ module LambdaInterpreter =
                 | Abstraction(v, term) ->
                     match term2 with
                     | Applique(termA, termB) ->
-                        let term = fixVariables term v termA
-                        (Applique(substitute term v termA, termB), true)
+                        let term = fixVariables term termA
+                        (Applique(substituteFv term v termA, termB), true)
                     | _ ->
-                        let term = fixVariables term v term2
-                        (substitute term v term2, true)
+                        let term = fixVariables term term2
+                        (substituteFv term v term2, true)
                 | _ ->
                     let newTerm1, isSuccessful = loop term1
                     if isSuccessful then
