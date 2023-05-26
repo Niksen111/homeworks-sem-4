@@ -8,10 +8,12 @@ let termId = Abstraction('l', Variable('l'))
 let termTrue = Abstraction('x', Abstraction('y', Variable('x')))
 let termFalse = Abstraction('z', Abstraction('w', Variable('w')))
 let termIf = Abstraction('b', Abstraction('t', Abstraction('f', Applique(Variable('b'), Applique(Variable('t'), Variable('f'))))))
-let termAnd = Abstraction('a', Abstraction('b', Applique(termIf, Applique(Variable 'a', Applique(termTrue, Variable 'b')))))
+let termOr = Abstraction('a', Abstraction('b', Applique(termIf, Applique(Variable 'a', Applique(termTrue, Variable 'b')))))
 // IF TRUE u v
+// Result u
 let term1 = Applique(termIf, Applique(termTrue, Applique(Variable 'u', Variable 'v')))
 // FALSE ID v
+// Result v
 let term2 = Applique(termFalse, Applique(termId, Variable 'v'))
 
 [<Test>]
@@ -32,8 +34,24 @@ let ``NormalStrategy works 1`` () =
 
 
 [<Test>]
-let ``NormalStrategy works`` () =
+let ``NormalStrategy works2`` () =
     let result = normalStrategy term1
     match result with
-    | Variable _ -> Assert.Pass()
+    | Variable u when u = 'u' -> ()
     | _ -> Assert.Fail()
+    
+[<Test>]
+let ``bv works`` () =
+    bv termIf |> should equal ['b'; 't'; 'f']
+    bv term1 |> should equal ['b'; 't'; 'f'; 'x'; 'y']
+    
+    
+[<Test>]
+let ``fv works`` () =
+    fv termIf |> List.isEmpty |> should be True
+    fv term1 |> should equal ['u'; 'v']
+    
+[<Test>]
+let ``isValidTerm works`` () =
+    isValidTerm term1 |> should be True
+    isValidTerm (Abstraction('x', Abstraction('x', Variable 'y'))) |> should be False
