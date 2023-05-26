@@ -2,7 +2,7 @@ module PhoneDictionaryTests
 
 open System.IO
 open NUnit.Framework
-open PhoneDictionary.Program.PhoneDictionary
+open PhoneDictionary.Utilities.Utilities
 open System.Collections.Generic
 open FsUnit
 
