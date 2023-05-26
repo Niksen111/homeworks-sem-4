@@ -3,9 +3,9 @@
 open System
 
 module Workflows =
-    type RoundBuilder(accuracy: int) =
-        member this.Bind(x, f) =
-            f x
-        member this.Return(x) =
-            Math.Round(x |> float, accuracy)
-    let rounding = RoundBuilder(3)
+    type RoundBuilder(accuracy: uint) =
+        member this.Bind(x: float, f) =
+            f <| Math.Round(x, accuracy |> int)
+        member this.Return(x: float) =
+            Math.Round(x, accuracy |> int)
+    let rounding accuracy = RoundBuilder(accuracy)
