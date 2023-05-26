@@ -29,7 +29,7 @@ let ``Get other variables works`` () =
 let ``NormalStrategy works 1`` () =
     let result = normalStrategy term2
     match result with
-    | Variable v when v = 'v' -> ()
+    | Variable 'v' -> ()
     | _ -> Assert.Fail()
 
 
@@ -37,7 +37,7 @@ let ``NormalStrategy works 1`` () =
 let ``NormalStrategy works2`` () =
     let result = normalStrategy term1
     match result with
-    | Variable u when u = 'u' -> ()
+    | Variable 'u' -> ()
     | _ -> Assert.Fail()
     
 [<Test>]
@@ -60,8 +60,7 @@ let ``substituteFv works`` () =
     let term = Applique(Variable 'x', Applique(Variable 'y', Variable 'x'))
     let result = substituteFv term 'x' (Variable 'z')
     match result with
-    | Applique(Variable(x1), Applique(Variable(x2), Variable(x3)))
-        when x1 = 'z' && x2 = 'y' && x3 = 'z' -> ()
+    | Applique(Variable('z'), Applique(Variable('y'), Variable('z'))) -> ()
     | _ -> Assert.Fail("Incorrect result.")
     
 [<Test>]
@@ -69,13 +68,12 @@ let ``substituteBv works`` () =
     let term = Abstraction('x', Applique(Variable 'x', Variable 'y'))
     let result = substituteBv term 'x' 'z'
     match result with
-    | Abstraction(x1, Applique(Variable(x2), Variable(x3)))
-        when x1 = 'z' && x2 = 'z' && x3 = 'y' -> ()
+    | Abstraction('z', Applique(Variable('z'), Variable('y'))) -> ()
     | _ -> Assert.Fail("Incorrect result.")
 
 [<Test>]
 let ``fixVariables works`` () =
     let result = fixVariables termTrue termTrue
     match result with
-    | Abstraction(v1, Abstraction(v2, Variable v3)) when v1 = 'a' && v2 = 'b' && v3 = 'a' -> ()
+    | Abstraction('a', Abstraction('b', Variable 'a')) -> ()
     | _ -> Assert.Fail("Incorrect result.")
