@@ -1,12 +1,10 @@
 ﻿module PhoneDictionary.UI
 
 open System
-open System.Collections.Generic
-open PhoneDictionary.Utilities.Utilities
+open PhoneDictionary.Utilities
 
 module UI =
-    let dictionaryPN = Dictionary<string, string>()
-    let dictionaryNP = Dictionary<string, string>()
+    let phoneBook = PhoneBook()
     
     let printHelp () =
         printfn "Commands list:"
@@ -35,35 +33,35 @@ module UI =
         | "quit" -> if chunks.Length = 1 then exit 0 else printErr ()
         | "add" ->
             if chunks.Length = 3 then
-                printfn "%s" (if add chunks[1] chunks[2] dictionaryPN dictionaryNP  then "Success." else "Incorrect phone number.")
+                printfn "%s" (if phoneBook.add chunks[1] chunks[2] then "Success." else "Incorrect phone number.")
             else
                 printErr ()
         | "remove" ->
             if chunks.Length = 2 then
-                printfn "%s" (if remove chunks[1] dictionaryPN dictionaryNP then "Success." else "No entry found.")
+                printfn "%s" (if phoneBook.remove chunks[1] then "Success." else "No entry found.")
             else
                 printErr ()
         | "find" ->
             if chunks.Length = 3 then
                 match chunks[1] with
                 | "-n" ->
-                    if isPhoneNumber chunks[2] then
-                        printfn "%s" <| findName chunks[2] dictionaryPN
+                    if phoneBook.isPhoneNumber chunks[2] then
+                        printfn "%s" <| phoneBook.findName chunks[2]
                     else
                         printErr ()
-                | "-p" -> printfn "%s" <| findPhone chunks[2] dictionaryNP
+                | "-p" -> printfn "%s" <| phoneBook.findPhone chunks[2]
                 | _ -> printErr ()
-        | "print" -> if chunks.Length = 1 then print dictionaryPN else printErr ()
+        | "print" -> if chunks.Length = 1 then phoneBook.print else printErr ()
         | "save" -> if chunks.Length = 2 then
-                        printfn "%s" (if save chunks[1] dictionaryPN then "Success." else "Fail.")
+                        printfn "%s" (if phoneBook.save chunks[1] then "Success." else "Fail.")
                     else printErr ()
         | "load" ->
             if chunks.Length = 2 then
-                printfn "%s" (if (load chunks[1] dictionaryPN dictionaryNP) then "Success." else "File is not a phone book.")
+                printfn "%s" (if (phoneBook.load chunks[1]) then "Success." else "File is not a phone book.")
             else
                 printErr ()
-        | "clear" -> if chunks.Length = 1 then clear dictionaryPN dictionaryNP else printErr ()
-        | "count" -> if chunks.Length = 1 then printfn "%d" (count dictionaryPN) else printErr ()
+        | "clear" -> if chunks.Length = 1 then phoneBook.clear else printErr ()
+        | "count" -> if chunks.Length = 1 then printfn "%d" phoneBook.count else printErr ()
         | "help" -> if chunks.Length = 1 then printHelp () else printErr ()
         | _ -> printErr ()
 
