@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "StringCalculations", "StringCalculations\StringCalculations.fsproj", "{97C39A2A-B645-4A30-993A-3ADE9D495F04}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "StringCalculationsTests", "StringCalculationsTests\StringCalculationsTests.fsproj", "{83196858-06BC-452D-AC81-EC7C3A5C5F2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{97C39A2A-B645-4A30-993A-3ADE9D495F04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97C39A2A-B645-4A30-993A-3ADE9D495F04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97C39A2A-B645-4A30-993A-3ADE9D495F04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83196858-06BC-452D-AC81-EC7C3A5C5F2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83196858-06BC-452D-AC81-EC7C3A5C5F2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83196858-06BC-452D-AC81-EC7C3A5C5F2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83196858-06BC-452D-AC81-EC7C3A5C5F2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
