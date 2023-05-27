@@ -17,7 +17,6 @@ type Computer(system: OS, id: int, isInfected: bool) =
     member this.TryInfect infectProb =
         if not isInfected && this.Random.NextDouble() <= infectProb system then
             containsVirus <- true
-            this.PrintState()
             true
         else
             false
@@ -32,6 +31,7 @@ type Computer(system: OS, id: int, isInfected: bool) =
     member this.ActivateVirus() =
         if containsVirus && isInfected |> not then
             infect()
+            this.PrintState()
     member this.IsInfected = isInfected
     member this.System = system
     member this.PrintState() =
