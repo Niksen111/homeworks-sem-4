@@ -10,18 +10,22 @@ let computersNet() =
     let computers = 
         [ Computer(Win, 1)
           Computer(Win, 2)
-          Computer(Gnu, 3, true)
-          Computer(Gnu, 4)
-          Computer(Mac, 5)
-          Computer(Mac, 6)]
+          Computer(Win, 3)
+          Computer(Gnu, 4, true)
+          Computer(Gnu, 5)
+          Computer(Mac, 6)
+          Computer(Mac, 7)
+          Computer(Mac, 8)]
         
     let connections =
-        [ [computers[0]; computers[2]]
-          [computers[0]]
-          [computers[0]; computers[4]; computers[5]]
-          []
-          [computers[2]; computers[5]]
-          [computers[2]; computers[4]] ]
+        [ [computers[1]]
+          [computers[0]; computers[2]; computers[3]]
+          [computers[1]]
+          [computers[1]; computers[5]]
+          [computers[5]]
+          [computers[3]; computers[4]; computers[6]]
+          [computers[5]]
+          []]
     
     List.zip computers connections |> List.map (fun (comp, conn) -> comp.Neighbors <- conn) |> ignore
     
@@ -33,7 +37,7 @@ let network infectChance =
     Network(computersNet(), infectChance)
 
 [<Test>]
-let ``Network is infected in 2 steps`` () =
+let ``Network is infected in 3 steps`` () =
     let chance = function
         | Win -> 0.001
         | Gnu -> 0.001
@@ -43,4 +47,20 @@ let ``Network is infected in 2 steps`` () =
     let computers = myNetwork.Computers
     computers |> List.map (fun comp -> comp.Random <- mock) |> ignore 
     myNetwork.WorkWileChangeable()
-    myNetwork.Iteration |> should equal 3
+    myNetwork.LastIteration |> should equal 3
+    // Infected all but comp 8
+    for comp in computers do
+        comp.IsInfected |> should equal (comp.Id <> 8)
+        
+[<Test>]
+let ``Network is not infected if the chance is 0``() =
+    let chance = function
+        | Win -> 0.0
+        | Gnu -> 0.0
+        | Mac -> 0.0
+    let myNetwork = network chance
+    myNetwork.WorkWileChangeable()
+    myNetwork.LastIteration |> should equal 1
+    // Infected no one but comp 4
+    for comp in myNetwork.Computers do
+        comp.IsInfected |> should equal (comp.Id <> 4 |> not)
