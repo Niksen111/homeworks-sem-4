@@ -30,3 +30,5 @@ Structures and algorithms for computer data processing (SACDP).
 - 7Homework
   - Lazy
   - MiniCrawler
+- 8Homework
+  - Lambda Grammar
