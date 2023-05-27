@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EvenNumbers", "EvenNumbers\EvenNumbers.fsproj", "{94FFDEC0-E37A-4F5C-A918-589B35573BB9}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EvenNumbersTests", "EvenNumbersTests\EvenNumbersTests.fsproj", "{3FB7B763-C929-4D1F-B08B-F77635FF4602}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94FFDEC0-E37A-4F5C-A918-589B35573BB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94FFDEC0-E37A-4F5C-A918-589B35573BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94FFDEC0-E37A-4F5C-A918-589B35573BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94FFDEC0-E37A-4F5C-A918-589B35573BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FB7B763-C929-4D1F-B08B-F77635FF4602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FB7B763-C929-4D1F-B08B-F77635FF4602}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FB7B763-C929-4D1F-B08B-F77635FF4602}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FB7B763-C929-4D1F-B08B-F77635FF4602}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
