@@ -37,7 +37,7 @@ let network infectChance =
     Network(computersNet(), infectChance)
 
 [<Test>]
-let ``Network is infected in 3 steps`` () =
+let ``Network algorithm works right`` () =
     let chance = function
         | Win -> 0.001
         | Gnu -> 0.001
@@ -46,6 +46,15 @@ let ``Network is infected in 3 steps`` () =
     let mock = mockX 0.0001
     let computers = myNetwork.Computers
     computers |> List.map (fun comp -> comp.Random <- mock) |> ignore 
+    
+    myNetwork.Step()
+    computers[1].IsInfected |> should be True
+    computers[5].IsInfected |> should be True
+    computers[0].IsInfected |> should be False
+    computers[2].IsInfected |> should be False
+    computers[4].IsInfected |> should be False
+    computers[6].IsInfected |> should be False
+    
     myNetwork.WorkWileChangeable()
     myNetwork.LastIteration |> should equal 3
     // Infected all but comp 8

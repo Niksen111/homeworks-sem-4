@@ -12,9 +12,11 @@ module LocalNetwork =
             printfn $"Iteration {lastIteration + 1}"
             lastIteration <- lastIteration + 1
             changeable <- false
+            let mutable newInfected = List.Empty
             for computer in this.Computers do
-                if computer.IsInfected then
-                    let result = computer.InfectNeighbors infectChance
+                if computer.IsInfected && newInfected |> List.contains computer.Id |> not then
+                    let result, localInfected = computer.InfectNeighbors infectChance
+                    newInfected <- newInfected @ localInfected
                     changeable <- changeable || result
             
         member this.Changeable = changeable

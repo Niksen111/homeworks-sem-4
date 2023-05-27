@@ -17,13 +17,18 @@ type Computer(system: OS, id: int, isInfected: bool) =
         if not isInfected && this.Random.NextDouble() <= infectProb system then
             infect()
             this.PrintState()
+            true
+        else
+            false
     member this.InfectNeighbors infectProb =
         let mutable possiblyInfect = false
+        let mutable newInfected = List.Empty
         for neighbor in this.Neighbors do
             if neighbor.IsInfected |> not && neighbor.System |> infectProb > 0.0 then
-                neighbor.TryInfect infectProb
+                if neighbor.TryInfect infectProb then
+                    newInfected <- neighbor.Id::newInfected
                 possiblyInfect <- true
-        possiblyInfect
+        (possiblyInfect, newInfected)
     member this.IsInfected = isInfected
     member this.System = system
     member this.PrintState() =
