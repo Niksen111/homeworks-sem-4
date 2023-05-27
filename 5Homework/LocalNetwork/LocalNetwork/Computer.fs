@@ -7,6 +7,7 @@ type OS =
 
 type Computer(system: OS, id: int, isInfected: bool) =
     let mutable isInfected = isInfected
+    let mutable containsVirus = false
     let mutable (neighbors: Computer list) = List.Empty
     let infect () =
         isInfected <- true
@@ -15,20 +16,22 @@ type Computer(system: OS, id: int, isInfected: bool) =
     member val Random = System.Random() with get, set
     member this.TryInfect infectProb =
         if not isInfected && this.Random.NextDouble() <= infectProb system then
-            infect()
+            containsVirus <- true
             this.PrintState()
             true
         else
             false
     member this.InfectNeighbors infectProb =
         let mutable possiblyInfect = false
-        let mutable newInfected = List.Empty
-        for neighbor in this.Neighbors do
-            if neighbor.IsInfected |> not && neighbor.System |> infectProb > 0.0 then
-                if neighbor.TryInfect infectProb then
-                    newInfected <- neighbor.Id::newInfected
-                possiblyInfect <- true
-        (possiblyInfect, newInfected)
+        if this.IsInfected then
+            for neighbor in this.Neighbors do
+                if neighbor.IsInfected |> not && neighbor.System |> infectProb > 0.0 then
+                    if neighbor.TryInfect infectProb then
+                        possiblyInfect <- true
+        possiblyInfect
+    member this.ActivateVirus() =
+        if containsVirus && isInfected |> not then
+            infect()
     member this.IsInfected = isInfected
     member this.System = system
     member this.PrintState() =
