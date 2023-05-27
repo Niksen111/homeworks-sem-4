@@ -1,0 +1,29 @@
+\documentclass{article}
+
+\usepackage[english]{babel}
+\usepackage{mathtools}
+
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\title{S K K}
+\author{Ksenchik Nikita}
+
+\begin{document}
+\maketitle
+$S \equiv \lambda x\ y\ z.x\ z\ (y\ z)$\\
+$K \equiv \ \lambda x \ y.x$\\
+$I \equiv \ \lambda x.x$\\
+\\
+To prove:\\
+$S K K = I$\\ \\
+Proof:
+\begin{enumerate}
+    \item $(\lambda x\ y\ z.x\ z\ (y\ z))\ (\lambda x \ y.x)\ (\lambda x \ y.x)\ \rightarrow_\beta$
+    \item $(\lambda y\ z.(\lambda x \ y.x)\ z\ (y\ z))\ (\lambda x \ y.x)\ \rightarrow_\beta$
+    \item $(\lambda z.(\lambda x \ y.x)\ z\ ((\lambda x \ y.x)\ z))\ \rightarrow_\beta$
+    \item $\lambda z.z\ \rightarrow_\alpha$
+    \item $\lambda x.x\ \equiv \ I$ 
+
+\end{enumerate}
+
+\end{document}
