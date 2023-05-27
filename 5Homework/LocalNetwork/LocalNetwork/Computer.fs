@@ -4,8 +4,6 @@ type OS =
     | Win
     | Gnu
     | Mac
-    
-let random = System.Random()
 
 type Computer(system: OS, id: int, isInfected: bool) =
     let mutable isInfected = isInfected
@@ -14,21 +12,21 @@ type Computer(system: OS, id: int, isInfected: bool) =
         isInfected <- true
     member this.Id = id
     member val Neighbors = neighbors with get, set
+    member val Random = System.Random() with get, set
     member this.TryInfect infectProb =
-        if not isInfected && random.NextDouble() <= infectProb system then
+        if not isInfected && this.Random.NextDouble() <= infectProb system then
             infect()
-            this.PrintState
+            this.PrintState()
     member this.InfectNeighbors infectProb =
         let mutable possiblyInfect = false
-        for neighbor in neighbors do
-            if neighbor.IsInfected |> not && neighbor.System |> infectProb > 0. then
+        for neighbor in this.Neighbors do
+            if neighbor.IsInfected |> not && neighbor.System |> infectProb > 0.0 then
                 neighbor.TryInfect infectProb
                 possiblyInfect <- true
         possiblyInfect
-            
     member this.IsInfected = isInfected
     member this.System = system
-    member this.PrintState =
+    member this.PrintState() =
         if isInfected then
             printfn $"Computer {id} is infected."
         else
