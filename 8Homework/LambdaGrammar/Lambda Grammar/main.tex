@@ -26,14 +26,15 @@ $
 \section{Grammar 2}
 $
 <program>\ ::=\ let <variable>\ =\ <term>\ |\ <term> \\
-<term>\ ::=\ <applique>\ |\ <term'> \\
-<term'>\ ::=\ <variable>\ |\ <abstraction>\ |\ "(" <term> ")" \\
-<applique>\ ::=\ <term>\ <term'> \\
+<term>\ ::=\ <content>\ <term'> \\
+<term'>\ ::=\ <content>\ <term'>\ |\ <epsilon> \\
+<content>\ ::=\ <variable>\ |\ <abstraction>\ |\ "(" <term> ")" \\
 <abstraction>\ ::=\ \backslash <variable>\ \{<variable>\}.<term> \\
 <variable>\ ::=\ <keyword-excepion> |\ <letter>\ \{<letter>\ |\ <digit>\} \\
 <keyword-exception>\ ::=\ let \\
 <letter>\ ::=\ a\ |\ ...\ |\ z\ |\ A\ |\ ...\ |\ Z \\
-<digit>\ ::=\ 1\ |\ ...\ |\ 9
+<digit>\ ::=\ 1\ |\ ...\ |\ 9 \\
+<epsilon>\ ::=\ ""
 $
 \section{Examlpe 1, Gr. 1}
 $
