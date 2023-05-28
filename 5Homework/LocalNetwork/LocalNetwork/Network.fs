@@ -1,27 +1,20 @@
 ﻿namespace LocalNetwork
 
 open LocalNetwork.Computer
+open LocalNetwork.Virus
 
 module LocalNetwork =
-    type Network(computers: Computer list, infectChance) =
-        let mutable lastIteration = 0
-        let mutable changeable = true
-        member this.LastIteration = lastIteration
+    type Network(computers: Computer list, infectChance: OS -> float, random: unit -> float) =
+        let virus = Virus(computers |> List.filter (fun comp -> comp.IsInfected), infectChance, random)
+        member val LastIteration = 0 with get, set
         member this.Computers = computers
         member this.Step() =
-            printfn $"Iteration {lastIteration + 1}"
-            lastIteration <- lastIteration + 1
-            changeable <- false
-            for computer in this.Computers do
-                if computer.IsInfected then
-                    let result = computer.InfectNeighbors infectChance
-                    changeable <- changeable || result
-            for computer in this.Computers do
-                computer.ActivateVirus()
-            
-        member this.Changeable = changeable
-        member this.WorkWileChangeable() =
-            while this.Changeable do
+            printfn $"Iteration {this.LastIteration + 1}"
+            this.LastIteration <- this.LastIteration + 1
+            virus.SpreadInfection()
+        member this.Changeable = virus.AbleToInfect
+        member this.WorkWhileChangeable() =
+            while virus.AbleToInfect do
                 this.Step()
             printfn "Work finished!"
         

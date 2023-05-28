@@ -3,7 +3,6 @@ module LocalNetworkTests
 open NUnit.Framework
 open LocalNetwork.LocalNetwork
 open LocalNetwork.Computer
-open Foq
 open FsUnit
 
 let computersNet() =
@@ -25,41 +24,35 @@ let computersNet() =
           [computers[5]]
           [computers[3]; computers[4]; computers[6]]
           [computers[5]]
-          []]
+          [] ]
     
     List.zip computers connections |> List.map (fun (comp, conn) -> comp.Neighbors <- conn) |> ignore
     
     computers
-    
-let mockX (x: float) = Mock<System.Random>().Setup(fun x -> <@ x.NextDouble() @>).Returns(x).Create()
 
-let network infectChance =
-    Network(computersNet(), infectChance)
+let network infectChance random =
+    Network(computersNet(), infectChance, random)
 
 [<Test>]
-let ``Network algorithm works right`` () =
+let ``Only neighboring computers are infected`` () =
     let chance = function
-        | Win -> 0.001
-        | Gnu -> 0.001
-        | Mac -> 0.001
-    let myNetwork = network chance
-    let mock = mockX 0.0001
+        | Win -> 1.0
+        | Gnu -> 1.0
+        | Mac -> 1.0
+    let myNetwork = network chance (System.Random().NextDouble)
     let computers = myNetwork.Computers
-    computers |> List.map (fun comp -> comp.Random <- mock) |> ignore 
+    let after1Step = [|false; true; false; true; false; true; false; false|]
+    let after2Step = [|true; true; true; true; true; true; true; false|]
+        
+    myNetwork.Step()
+    for i in 0..7 do
+        computers[i].IsInfected |> should equal after1Step[i]
+    myNetwork.Changeable |> should be True
     
     myNetwork.Step()
-    computers[1].IsInfected |> should be True
-    computers[5].IsInfected |> should be True
-    computers[0].IsInfected |> should be False
-    computers[2].IsInfected |> should be False
-    computers[4].IsInfected |> should be False
-    computers[6].IsInfected |> should be False
-    
-    myNetwork.WorkWileChangeable()
-    myNetwork.LastIteration |> should equal 3
-    // Infected all but comp 8
-    for comp in computers do
-        comp.IsInfected |> should equal (comp.Id <> 8)
+    for i in 0..7 do
+        computers[i].IsInfected |> should equal after2Step[i]
+    myNetwork.Changeable |> should be False
         
 [<Test>]
 let ``Network is not infected if the chance is 0``() =
@@ -67,9 +60,12 @@ let ``Network is not infected if the chance is 0``() =
         | Win -> 0.0
         | Gnu -> 0.0
         | Mac -> 0.0
-    let myNetwork = network chance
-    myNetwork.WorkWileChangeable()
-    myNetwork.LastIteration |> should equal 1
-    // Infected no one but comp 4
-    for comp in myNetwork.Computers do
-        comp.IsInfected |> should equal (comp.Id <> 4 |> not)
+    let myNetwork = network chance (System.Random().NextDouble)
+    let computers = myNetwork.Computers
+    let afterStep = [|false; false; false; true; false; false; false; false|]
+
+    myNetwork.Changeable |> should be False
+    myNetwork.Step()
+    for i in 0..7 do
+        computers[i].IsInfected |> should equal afterStep[i]
+    myNetwork.Changeable |> should be False
