@@ -11,19 +11,31 @@
 \begin{document}
 \maketitle
 
-\section{Grammar}
+\section{Grammar 1}
 $
 <program>\ ::=\ let <variable>\ =\ <term>\ |\ <term> \\
-<term>\ ::=\ <application>\ |\ <term'> \\
+<term>\ ::=\ <appliqueSeq>\ |\ <term'> \\
 <term'>\ ::=\ <variable>\ |\ <abstraction>\ |\ "(" <term> ")" \\
-<applique>\ ::=\ <term'>\ <term'>\ \{<term'>\} \\
+<appliqueSeq>\ ::=\ <term'>\ <term'>\ \{<term'>\} \\
 <abstraction>\ ::=\ \backslash <variable>\ \{<variable>\}.<term> \\
 <variable>\ ::=\ <keyword-excepion> |\ <letter>\ \{<letter>\ |\ <digit>\} \\
 <keyword-exception>\ ::=\ let \\
 <letter>\ ::=\ a\ |\ ...\ |\ z\ |\ A\ |\ ...\ |\ Z \\
 <digit>\ ::=\ 1\ |\ ...\ |\ 9
 $
-\section{Examlpe 1}
+\section{Grammar 2}
+$
+<program>\ ::=\ let <variable>\ =\ <term>\ |\ <term> \\
+<term>\ ::=\ <applique>\ |\ <term'> \\
+<term'>\ ::=\ <variable>\ |\ <abstraction>\ |\ "(" <term> ")" \\
+<applique>\ ::=\ <term>\ <term'> \\
+<abstraction>\ ::=\ \backslash <variable>\ \{<variable>\}.<term> \\
+<variable>\ ::=\ <keyword-excepion> |\ <letter>\ \{<letter>\ |\ <digit>\} \\
+<keyword-exception>\ ::=\ let \\
+<letter>\ ::=\ a\ |\ ...\ |\ z\ |\ A\ |\ ...\ |\ Z \\
+<digit>\ ::=\ 1\ |\ ...\ |\ 9
+$
+\section{Examlpe 1, Gr. 1}
 $
 let K = \backslash x\ y.x\ \Longrightarrow \\
 <program> \\
@@ -48,7 +60,7 @@ let\ K\ =\ \backslash x\ y.<letter>\ \{<letter>\ |\ <digit>\} \\
 let\ K\ =\ \backslash x\ y.x\ \{<letter>\ |\ <digit>\} \\
 let\ K\ =\ \backslash x\ y.x \\
 $
-\section{Example 2}
+\section{Example 2, Gr 1}
 $
 let\ gg\ =\ (\backslash l\ o.l)\ e\ z\ \Longrightarrow \\
 <program> \\
