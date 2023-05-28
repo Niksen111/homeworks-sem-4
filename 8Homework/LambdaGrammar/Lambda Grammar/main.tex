@@ -26,15 +26,14 @@ $
 \section{Grammar 2}
 $
 <program>\ ::=\ let <variable>\ =\ <term>\ |\ <term> \\
-<term>\ ::=\ <content>\ <term'> \\
-<term'>\ ::=\ <content>\ <term'>\ |\ <epsilon> \\
+<term>\ ::=\ <content>\ |\ <applicatoin> \\
 <content>\ ::=\ <variable>\ |\ <abstraction>\ |\ "(" <term> ")" \\
+<applicatoin>\ ::=\ <content>\ <content>\ |\ <applique>\ <content> \\
 <abstraction>\ ::=\ \backslash <variable>\ \{<variable>\}.<term> \\
 <variable>\ ::=\ <keyword-exception> |\ <letter>\ \{<letter>\ |\ <digit>\} \\
 <keyword-exception>\ ::=\ let \\
 <letter>\ ::=\ a\ |\ ...\ |\ z\ |\ A\ |\ ...\ |\ Z \\
 <digit>\ ::=\ 1\ |\ ...\ |\ 9 \\
-<epsilon>\ ::=\ ""
 $
 \section{Examlpe 1, Gr. 1}
 $
@@ -44,17 +43,17 @@ let\ <variable>\ =\ <term> \\
 let\ <letter>\ \{<letter>\ |\ <digit>\}\ =\ <term> \\
 let\ K\ \{<letter>\ |\ <digit>\}\ =\ <term> \\
 let\ K\ =\ <term> \\
-let\ K\ =\ <term'> \\
-let\ K\ =\ <abstraction> \\
-let\ K\ =\ \backslash <variable>\ \{<variable>\}.<term> \\
-let\ K\ =\ \backslash <letter>\ \{<letter>\ |\ <digit>\}\ \{<variable>\}.<term> \\
-let\ K\ =\ \backslash <letter>\ \{<variable>\}.<term> \\
-let\ K\ =\ \backslash x\ \{<variable>\}.<term> \\
-let\ K\ =\ \backslash x\ <variable>\ \{<variable>\}.<term> \\
-let\ K\ =\ \backslash x\ <letter>\ \{<letter>\ |\ <digit>\}\ \{<variable>\}.<term> \\
-let\ K\ =\ \backslash x\ y\ \{<letter>\ |\ <digit>\}\ \{<variable>\}.<term> \\
-let\ K\ =\ \backslash x\ y\ \{<variable>\}.<term> \\
-let\ K\ =\ \backslash x\ y.<term> \\
+let\ K\ =\ <content>\ <term'> \\
+let\ K\ =\ <abstraction>\ <term'> \\
+let\ K\ =\ \backslash <variable>\ \{<variable>\}.<term>\ <term'> \\
+let\ K\ =\ \backslash <letter>\ \{<letter>\ |\ <digit>\}\ \{<variable>\}.<term>\ <term'> \\
+let\ K\ =\ \backslash <letter>\ \{<variable>\}.<term>\ <term'> \\
+let\ K\ =\ \backslash x\ \{<variable>\}.<term>\ <term'> \\
+let\ K\ =\ \backslash x\ <variable>\ \{<variable>\}.<term>\ <term'> \\
+let\ K\ =\ \backslash x\ <letter>\ \{<letter>\ |\ <digit>\}\ \{<variable>\}.<term>\ <term'> \\
+let\ K\ =\ \backslash x\ y\ \{<letter>\ |\ <digit>\}\ \{<variable>\}.<term>\ <term'> \\
+let\ K\ =\ \backslash x\ y\ \{<variable>\}.<term>\ <term'> \\
+let\ K\ =\ \backslash x\ y.<term>\ <term'> \\
 let\ K\ =\ \backslash x\ y.<term'> \\
 let\ K\ =\ \backslash x\ y.<variable> \\
 let\ K\ =\ \backslash x\ y.<letter>\ \{<letter>\ |\ <digit>\} \\
